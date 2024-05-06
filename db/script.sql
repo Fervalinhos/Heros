@@ -1,15 +1,15 @@
-CREATE DATABASE heros;
+CREATE DATABASE anti_heroes;
 
-\c heros;
+\c anti_heroes;
 
-CREATE TABLE heroes (
+CREATE TABLE anti_heroes (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     power VARCHAR(100) NOT NULL,
     experience INTEGER NOT NULL,
     lvl INTEGER NOT NULL,
-    hp INTEGER NOT NULL,
-    atack INTEGER NOT NULL,
+    health INTEGER NOT NULL,
+    attack INTEGER NOT NULL
 );
 
 CREATE TABLE battles (
@@ -20,5 +20,5 @@ CREATE TABLE battles (
     winner_id INTEGER NOT NULL,
     loser_id INTEGER NOT NULL,
     FOREIGN KEY (hero1_id) REFERENCES heroes(id),
-    FOREIGN KEY (hero2_id) REFERENCES heroes(id),
+    FOREIGN KEY (hero2_id) REFERENCES heroes(id)
 );
