@@ -30,14 +30,14 @@ app.get('/anti_heroes', async (req, res) => {
         if (result.rowCount == 0) {
             res.status(500).json({
                 status: 'null',
-                message: 'Nenhum heroi encontrado',
+                message: 'Nenhum anti-heroi encontrado',
                 total: result.rowCount,
             })
         }
 
         res.json({
             status: 'success',
-            message: 'Lista de herois',
+            message: 'Lista de anti-herois',
             total: result.rowCount,
             data: result.rows,
         });
@@ -65,7 +65,7 @@ app.get('/anti_heroes/:id', async (req, res) => {
 
         res.json({
             status: 'success',
-            message: 'Heroi encontrado',
+            message: 'Anti-Heroi encontrado',
             total: result.rowCount,
             data: result.rows,
         });
@@ -86,14 +86,14 @@ app.get('/anti_heroes/name/:name', async (req, res) => {
         if (result.rowCount == 0) {
             res.status(500).json({
                 status: 'null',
-                message: 'Heroi não encontrado',
+                message: 'Anti-Heroi não encontrado',
                 total: result.rowCount,
             })
         }
 
         res.json({
             status: 'success',
-            message: 'Heroi encontrado',
+            message: 'Anti-Heroi encontrado',
             total: result.rowCount,
             data: result.rows,
         });
