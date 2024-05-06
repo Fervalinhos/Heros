@@ -18,8 +18,8 @@ CREATE TABLE battles (
     id SERIAL PRIMARY KEY,
     anti_hero1_id INTEGER NOT NULL,
     anti_hero2_id INTEGER NOT NULL,
-    winner_id INTEGER NOT NULL,
-    loser_id INTEGER NOT NULL,
+    winner_id INTEGER,
+    loser_id INTEGER,
     FOREIGN KEY (anti_hero1_id) REFERENCES anti_heroes(id),
     FOREIGN KEY (anti_hero2_id) REFERENCES anti_heroes(id)
 );
