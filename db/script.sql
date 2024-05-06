@@ -12,16 +12,19 @@ CREATE TABLE anti_heroes (
     attack INTEGER NOT NULL
 );
 
+DROP TABLE IF EXISTS anti_heroes;
+
 CREATE TABLE battles (
     id SERIAL PRIMARY KEY,
     anti_hero1_id INTEGER NOT NULL,
     anti_hero2_id INTEGER NOT NULL,
-    result VARCHAR(100) NOT NULL,
     winner_id INTEGER NOT NULL,
     loser_id INTEGER NOT NULL,
     FOREIGN KEY (anti_hero1_id) REFERENCES anti_heroes(id),
     FOREIGN KEY (anti_hero2_id) REFERENCES anti_heroes(id)
 );
+
+DROP TABLE IF EXISTS battles;
 
 // sql - INSERT
 
