@@ -77,6 +77,34 @@ app.get('/anti_heroes/:id', async (req, res) => {
     }
 });
 
+app.get('/anti_heroes/:name/name', async (req, res) => {
+    try {
+        const { name } = req.params;
+
+        const result = await pool.query('SELECT * FROM wizard WHERE LOWER(name) LIKE $1', [`%${name.toLocaleLowerCase()}%`]);
+
+        if (result.rowCount == 0) {
+            res.status(500).json({
+                status: 'null',
+                message: 'Heroi não encontrado',
+                total: result.rowCount,
+            })
+        }
+
+        res.json({
+            status: 'success',
+            message: 'Heroi encontrado',
+            total: result.rowCount,
+            data: result.rows,
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: error.message,
+        });
+    }
+});
+
 app.post('/anti_heroes', async (req, res) => {
     try {
         const { name, power, experience, lvl, health, attack } = req.body;
