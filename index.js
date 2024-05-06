@@ -96,3 +96,41 @@ app.post('/anti_heroes', async (req, res) => {
     }
 });
 
+app.put('/anti_heroes/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, power, experience, lvl, health, attack } = req.body;
+
+        const result = await pool.query('UPDATE anti_heroes SET name = $1, power = $2, experience = $3, lvl = $4, health = $5, attack = $6 WHERE id = $7', [name, power, experience, lvl, health, attack, id]);
+
+        res.json({
+            status: 'success',
+            message: 'Anti-Heroi atualizado com sucesso',
+            data: req.body,
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: error.message,
+        });
+    }
+});
+
+app.delete('/anti_heroes/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const result = await pool.query('DELETE FROM anti_heroes WHERE id = $1', [id]);
+
+        res.json({
+            status: 'success',
+            message: 'Anti-Heroi deletado com sucesso',
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: error.message,
+        });
+    }
+});
+
