@@ -77,11 +77,11 @@ app.get('/anti_heroes/:id', async (req, res) => {
     }
 });
 
-app.get('/anti_heroes/:name/name', async (req, res) => {
+app.get('/anti_heroes/name/:name', async (req, res) => {
     try {
         const { name } = req.params;
 
-        const result = await pool.query('SELECT * FROM wizard WHERE LOWER(name) LIKE $1', [`%${name.toLocaleLowerCase()}%`]);
+        const result = await pool.query('SELECT * FROM anti_heroes WHERE LOWER(name) LIKE $1', [`%${name.toLocaleLowerCase()}%`]);
 
         if (result.rowCount == 0) {
             res.status(500).json({
