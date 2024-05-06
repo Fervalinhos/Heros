@@ -14,11 +14,38 @@ CREATE TABLE anti_heroes (
 
 CREATE TABLE battles (
     id SERIAL PRIMARY KEY,
-    hero1_id INTEGER NOT NULL,
-    hero2_id INTEGER NOT NULL,
+    anti_hero1_id INTEGER NOT NULL,
+    anti_hero2_id INTEGER NOT NULL,
     result VARCHAR(100) NOT NULL,
     winner_id INTEGER NOT NULL,
     loser_id INTEGER NOT NULL,
-    FOREIGN KEY (hero1_id) REFERENCES heroes(id),
-    FOREIGN KEY (hero2_id) REFERENCES heroes(id)
+    FOREIGN KEY (anti_hero1_id) REFERENCES anti_heroes(id),
+    FOREIGN KEY (anti_hero2_id) REFERENCES anti_heroes(id)
 );
+
+// sql - INSERT
+
+INSERT INTO anti_heroes (name, power, experience, lvl, health, attack) VALUES ('Joker', 'Crazy', 100, 1, 100, 10);
+INSERT INTO anti_heroes (name, power, experience, lvl, health, attack) VALUES ('Deadpool', 'Imortalidade', 0, 1, 100, 25);
+
+
+// Insomina - POST
+
+http://localhost:3000/anti_heroes
+{
+    "name": "Joker",
+    "power": "Crazy",
+    "experience": 100,
+    "lvl": 1,
+    "health": 100,
+    "attack": 10
+}
+
+{
+	"name" : "Deadpool",
+	"power" : "Imortalidade",
+	"experience" : 0,
+	"lvl" : 1,
+	"health" : 100,
+	"attack" : 25
+}

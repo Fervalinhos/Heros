@@ -19,6 +19,9 @@ app.listen(PORT, () => {
     console.log(`Server ON FML ✨ ${PORT}`);
 });
 
+
+// Rota de anti herois,
+
 app.get('/', (req, res) => {
     res.send("Teste de server com o banco de Anti-Herois");
 });
@@ -153,6 +156,34 @@ app.delete('/anti_heroes/:id', async (req, res) => {
         res.json({
             status: 'success',
             message: 'Anti-Heroi deletado com sucesso',
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: error.message,
+        });
+    }
+});
+
+//Rota de batalhas
+
+app.get('/battles', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM battles');
+
+        if (result.rowCount == 0) {
+            res.status(500).json({
+                status: 'null',
+                message: 'Nenhuma batalha encontrada',
+                total: result.rowCount,
+            })
+        }
+
+        res.json({
+            status: 'success',
+            message: 'Lista todas de batalhas',
+            total: result.rowCount,
+            data: result.rows,
         });
     } catch (error) {
         res.status(500).json({
