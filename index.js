@@ -168,7 +168,39 @@ app.delete('/anti_heroes/:id', async (req, res) => {
 //Rota de batalhas
 
 app.get('/battles', async (req, res) => {
+
     try {
+        // com um join mostre os dados da batalha e retorne TODOS os dados de quem ganhou
+
+        const winner = await pool.query('SELECT battles.id, anti_heroes.name as winner_name, anti_heroes.power as winner_power, anti_heroes.experience as winner_experience, anti_heroes.lvl as winner_lvl, anti_heroes.health as winner_health, anti_heroes.attack as winner_attack FROM battles JOIN anti_heroes ON battles.winner_id = anti_heroes.id');
+        const loser = await pool.query('SELECT battles.id, anti_heroes.name as loser_name, anti_heroes.power as loser_power, anti_heroes.experience as loser_experience, anti_heroes.lvl as loser_lvl, anti_heroes.health as loser_health, anti_heroes.attack as loser_attack FROM battles JOIN anti_heroes ON battles.loser_id = anti_heroes.id');
+
+        const resultBattle = winner.rows.map((winnerAnti_Hero, loserAnti_Hero) => {
+            return {
+                idBattle: winnerAnti_Hero.id,
+                nameWinner: winnerAnti_Hero.winner_name,
+                nameLoser: loser.rows[loserAnti_Hero].loser_name,
+                winner: {
+                    name: winnerAnti_Hero.winner_name,
+                    power: winnerAnti_Hero.winner_power,
+                    experience: winnerAnti_Hero.winner_experience,
+                    lvl: winnerAnti_Hero.winner_lvl,
+                    health: winnerAnti_Hero.winner_health,
+                    attack: winnerAnti_Hero.winner_attack,
+                },
+                loser: {
+                    name: loser.rows[loserAnti_Hero].loser_name,
+                    power: loser.rows[loserAnti_Hero].loser_power,
+                    experience: loser.rows[loserAnti_Hero].loser_experience,
+                    lvl: loser.rows[loserAnti_Hero].loser_lvl,
+                    health: loser.rows[loserAnti_Hero].loser_health,
+                    attack: loser.rows[loserAnti_Hero].loser_attack,
+                },
+            }
+        }
+
+        );
+
         const result = await pool.query('SELECT * FROM battles');
 
         if (result.rowCount == 0) {
@@ -181,16 +213,21 @@ app.get('/battles', async (req, res) => {
 
         res.json({
             status: 'success',
-            message: 'Lista todas de batalhas',
+            message: 'Lista de batalhas',
             total: result.rowCount,
-            data: result.rows,
+            data: resultBattle,
         });
+
     } catch (error) {
         res.status(500).json({
             status: 'error',
             message: error.message,
         });
     }
+
+        
+
+        
 });
 
 const calculateWinner = (anti_hero1, anti_hero2) => {
