@@ -170,8 +170,6 @@ app.delete('/anti_heroes/:id', async (req, res) => {
 app.get('/battles', async (req, res) => {
 
     try {
-        // com um join mostre os dados da batalha e retorne TODOS os dados de quem ganhou
-
         const winner = await pool.query('SELECT battles.id, anti_heroes.name as winner_name, anti_heroes.power as winner_power, anti_heroes.experience as winner_experience, anti_heroes.lvl as winner_lvl, anti_heroes.health as winner_health, anti_heroes.attack as winner_attack FROM battles JOIN anti_heroes ON battles.winner_id = anti_heroes.id');
         const loser = await pool.query('SELECT battles.id, anti_heroes.name as loser_name, anti_heroes.power as loser_power, anti_heroes.experience as loser_experience, anti_heroes.lvl as loser_lvl, anti_heroes.health as loser_health, anti_heroes.attack as loser_attack FROM battles JOIN anti_heroes ON battles.loser_id = anti_heroes.id');
 
@@ -231,13 +229,33 @@ app.get('/battles', async (req, res) => {
 });
 
 const calculateWinner = (anti_hero1, anti_hero2) => {
+    // faça que o vencedor ganhe 25 de exp e o perdedor 10 de exp
+
     const anti_hero1_power = anti_hero1.health * anti_hero1.attack;
     const anti_hero2_power = anti_hero2.health * anti_hero2.attack;
 
     if (anti_hero1_power > anti_hero2_power) {
+        anti_hero1.experience = anti_hero1.experience + 25;
+        anti_hero2.experience = anti_hero2.experience + 10;
         return anti_hero1;
     } else {
+        anti_hero1.experience = anti_hero1.experience + 10;
+        anti_hero2.experience = anti_hero2.experience + 25;
         return anti_hero2;
+    }
+}
+
+
+const calculateExp = (anti_hero1, anti_hero2) => {
+    const anti_hero1_exp = anti_hero1.experience;
+    const anti_hero2_exp = anti_hero2.experience;
+
+    if (anti_hero1_exp > 100) {
+        anti_hero1.lvl = anti_hero1.lvl + 1;
+        anti_hero1.experience = 0;
+    } else if (anti_hero2_exp > 100) {
+        anti_hero2.lvl = anti_hero2.lvl + 1;
+        anti_hero2.experience = 0;
     }
 }
 
