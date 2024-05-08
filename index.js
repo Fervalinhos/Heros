@@ -228,37 +228,26 @@ app.get('/battles', async (req, res) => {
         
 });
 
-const calculateWinner = (anti_hero1, anti_hero2) => {
-    // faça que o vencedor ganhe 25 de exp e o perdedor 10 de exp
-
+const calculateWinner = async (anti_hero1, anti_hero2) => {
     const anti_hero1_power = anti_hero1.health * anti_hero1.attack;
     const anti_hero2_power = anti_hero2.health * anti_hero2.attack;
 
     if (anti_hero1_power > anti_hero2_power) {
-        anti_hero1.experience = anti_hero1.experience + 25;
-        anti_hero2.experience = anti_hero2.experience + 10;
+        await pool.query('UPDATE anti_heroes SET experience = $1 WHERE id = $2', [anti_hero1.experience + 25, anti_hero1.id]);
+        await pool.query('UPDATE anti_heroes SET experience = $1 WHERE id = $2', [anti_hero2.experience + 10, anti_hero2.id]);
         return anti_hero1;
     } else {
-        anti_hero1.experience = anti_hero1.experience + 10;
-        anti_hero2.experience = anti_hero2.experience + 25;
+        await pool.query('UPDATE anti_heroes SET experience = $1 WHERE id = $2', [anti_hero1.experience + 10, anti_hero1.id]);
+        await pool.query('UPDATE anti_heroes SET experience = $1 WHERE id = $2', [anti_hero2.experience + 25, anti_hero2.id]);
         return anti_hero2;
     }
 }
 
-
-const calculateExp = (anti_hero1, anti_hero2) => {
-    const anti_hero1_exp = anti_hero1.experience;
-    const anti_hero2_exp = anti_hero2.experience;
-
-    if (anti_hero1_exp > 100) {
-        anti_hero1.lvl = anti_hero1.lvl + 1;
-        anti_hero1.experience = 0;
-    } else if (anti_hero2_exp > 100) {
-        anti_hero2.lvl = anti_hero2.lvl + 1;
-        anti_hero2.experience = 0;
+const calculateExp = async (anti_hero) => {
+    if (anti_hero.experience >= 100) {
+        await pool.query('UPDATE anti_heroes SET lvl = $1, experience = $2 WHERE id = $3', [anti_hero.lvl + 1, 0, anti_hero.id]);
     }
 }
-
 
 app.post('/battles', async (req, res) => {
     try {
@@ -268,13 +257,16 @@ app.post('/battles', async (req, res) => {
         const anti_hero2 = await pool.query('SELECT * FROM anti_heroes WHERE id = $1', [anti_hero2_id]);
 
         if (anti_hero1.rowCount == 0 || anti_hero2.rowCount == 0) {
-            res.status(500).json({
+            return res.status(500).json({
                 status: 'null',
                 message: 'Anti-Heroi não encontrado',
             })
         }
 
-        const winner = calculateWinner(anti_hero1.rows[0], anti_hero2.rows[0]);
+        const winner = await calculateWinner(anti_hero1.rows[0], anti_hero2.rows[0]);
+
+        await calculateExp(anti_hero1.rows[0]);
+        await calculateExp(anti_hero2.rows[0]);
 
         const result = await pool.query('INSERT INTO battles (anti_hero1_id, anti_hero2_id, winner_id, loser_id) VALUES ($1, $2, $3, $4)', [anti_hero1_id, anti_hero2_id, winner.id, winner.id == anti_hero1_id ? anti_hero2_id : anti_hero1_id]);
 
@@ -285,7 +277,6 @@ app.post('/battles', async (req, res) => {
                 winner: winner,
                 loser: winner.id == anti_hero1_id ? anti_hero2.rows[0] : anti_hero1.rows[0],
             },
-
         });
     } catch (error) {
         res.status(500).json({
