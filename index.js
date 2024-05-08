@@ -286,8 +286,6 @@ app.post('/battles', async (req, res) => {
     }
 });
 
-//faça uma rota que pegue todas as batalhas de um heroi pelo seu nome 
-
 app.get('/battles/:name', async (req, res) => {
 
     try {
