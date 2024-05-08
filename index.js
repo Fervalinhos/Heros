@@ -285,3 +285,36 @@ app.post('/battles', async (req, res) => {
         });
     }
 });
+
+//faça uma rota que pegue todas as batalhas de um heroi pelo seu nome 
+
+app.get('/battles/:name', async (req, res) => {
+
+    try {
+        const { name } = req.params;
+
+        const result = await pool.query('SELECT battles.id, anti_heroes.name as winner_name, anti_heroes.power as winner_power, anti_heroes.experience as winner_experience, anti_heroes.lvl as winner_lvl, anti_heroes.health as winner_health, anti_heroes.attack as winner_attack FROM battles JOIN anti_heroes ON battles.winner_id = anti_heroes.id WHERE LOWER(anti_heroes.name) LIKE $1', [`%${name.toLocaleLowerCase()}%`]);
+
+        if (result.rowCount == 0) {
+            res.status(500).json({
+                status: 'null',
+                message: 'Nenhuma batalha encontrada',
+                total: result.rowCount,
+            })
+        }
+
+        res.json({
+            status: 'success',
+            message: 'Lista de batalhas',
+            total: result.rowCount,
+            data: result.rows,
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: error.message,
+        });
+    }
+});
+
