@@ -30,6 +30,10 @@ DROP TABLE IF EXISTS battles;
 
 INSERT INTO anti_heroes (name, power, experience, lvl, health, attack) VALUES ('Joker', 'Crazy', 100, 1, 100, 10);
 INSERT INTO anti_heroes (name, power, experience, lvl, health, attack) VALUES ('Deadpool', 'Imortalidade', 0, 1, 100, 25);
+INSERT INTO anti_heroes (name, power, experience, lvl, health, attack) VALUES ('Venom', 'Symbiote', 50, 1, 100, 20);
+INSERT INTO anti_heroes (name, power, experience, lvl, health, attack) VALUES ('Harley Quinn', 'Psychic', 75, 1, 100, 15);
+INSERT INTO anti_heroes (name, power, experience, lvl, health, attack) VALUES ('Punisher', 'Marksman', 80, 1, 100, 30);
+
 
 
 // Insomina - POST
@@ -51,4 +55,31 @@ http://localhost:3000/anti_heroes
 	"lvl" : 1,
 	"health" : 100,
 	"attack" : 25
+}
+
+{
+    "name" : "Venom",
+    "power" : "Symbiote",
+    "experience" : 50,
+    "lvl" : 1,
+    "health" : 100,
+    "attack" : 20
+}
+
+{
+    "name" : "Harley Quinn",
+    "power" : "Psychic",
+    "experience" : 75,
+    "lvl" : 1,
+    "health" : 100,
+    "attack" : 15
+}
+
+{
+    "name" : "Punisher",
+    "power" : "Marksman",
+    "experience" : 80,
+    "lvl" : 1,
+    "health" : 100,
+    "attack" : 30
 }
