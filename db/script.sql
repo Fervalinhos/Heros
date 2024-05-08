@@ -33,6 +33,9 @@ INSERT INTO anti_heroes (name, power, experience, lvl, health, attack) VALUES ('
 INSERT INTO anti_heroes (name, power, experience, lvl, health, attack) VALUES ('Venom', 'Symbiote', 50, 1, 100, 20);
 INSERT INTO anti_heroes (name, power, experience, lvl, health, attack) VALUES ('Harley Quinn', 'Psychic', 75, 1, 100, 15);
 INSERT INTO anti_heroes (name, power, experience, lvl, health, attack) VALUES ('Punisher', 'Marksman', 80, 1, 100, 30);
+INSERT INTO anti_heroes (name, power, experience, lvl, health, attack) VALUES ('Catwoman', 'Agility and Stealth', 60, 1, 100, 18);
+INSERT INTO anti_heroes (name, power, experience, lvl, health, attack) VALUES ('Loki', 'Illusions and Trickery', 90, 1, 100, 30);
+
 
 
 
@@ -79,6 +82,24 @@ http://localhost:3000/anti_heroes
     "name" : "Punisher",
     "power" : "Marksman",
     "experience" : 80,
+    "lvl" : 1,
+    "health" : 100,
+    "attack" : 30
+}
+
+{
+    "name" : "Catwoman",
+    "power" : "Agility and Stealth",
+    "experience" : 60,
+    "lvl" : 1,
+    "health" : 100,
+    "attack" : 18
+}
+
+{
+    "name" : "Loki",
+    "power" : "Illusions and Trickery",
+    "experience" : 90,
     "lvl" : 1,
     "health" : 100,
     "attack" : 30
